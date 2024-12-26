@@ -13,7 +13,7 @@ export default function Screen() {
     <Container className='items-center justify-center'>
       <Header type='default' />
       <Wrap type='default' full>
-        <Text>스케쥴 상세</Text>
+        <Text>스케쥴 상세111 </Text>
         <Text>{JSON.stringify(data)}</Text>
       </Wrap>
     </Container>
