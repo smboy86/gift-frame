@@ -7,12 +7,13 @@ import { Image, ImageProps } from 'expo-image';
 interface ImageBoxProps extends ImageProps {
   className: string;
   type?: 'default' | 'btn';
+  imgContentFit?: 'contain' | 'cover';
 }
 
 const defaultUri = require('~/assets/app/logo.png'); // local
 
 const ImageBox = React.forwardRef<ViewRef, ImageBoxProps>(
-  ({ className, type = 'defalut', source = defaultUri }, ref) => {
+  ({ className, type = 'defalut', imgContentFit = 'contain', source = defaultUri, ...props }, ref) => {
     // 기본적으로 height 풀
     // 피그마에서 가로 길이를 계산해서 className 에 넣어 그린다. w-[28.8%]
     return (
@@ -20,7 +21,7 @@ const ImageBox = React.forwardRef<ViewRef, ImageBoxProps>(
         <Image
           style={{ flex: 1 }}
           source={source}
-          contentFit='contain' // default
+          contentFit={imgContentFit} // default
           transition={150}
         />
       </View>
