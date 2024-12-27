@@ -10,24 +10,11 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: 'bg-brand web:hover:opacity-90 active:opacity-90', // mod
-        destructive: 'bg-destructive web:hover:opacity-90 active:opacity-90',
-        outline:
-          'border border-brand bg-background web:hover:bg-accent web:hover:text-accent-foreground active:bg-accent',
-        secondary: 'bg-secondary web:hover:opacity-80 active:opacity-80',
-        ghost: 'web:hover:bg-accent web:hover:text-accent-foreground active:bg-accent',
-        link: 'web:underline-offset-4 web:hover:underline web:focus:underline ',
-        small: 'border border-brand rounded-full py-1',
-        kakao: 'bg-[#FEE500]',
+        inline: 'bg-white web:hover:opacity-90 active:opacity-90 border border-brand',
       },
       size: {
-        // default: 'h-10 px-4 py-2 native:h-12 native:px-5 native:py-3',
-        default: 'px-4 py-4', // mod
-        small: 'px-4 py-[7px]', // add
-        sm: 'h-9 rounded-md px-3',
-        base: '', // add
-        // lg: 'h-11 rounded-md px-8 native:h-14',
-        lg: 'px-4 py-4',
-        icon: 'h-10 w-10',
+        default: 'px-4 py-3', // mod
+        inline: '',
       },
     },
     defaultVariants: {
@@ -43,21 +30,11 @@ const buttonTextVariants = cva(
     variants: {
       variant: {
         default: 'text-white text-base', // mod
-        destructive: 'text-destructive-foreground',
-        outline: 'text-brand group-active:text-accent-foreground', // mod
-        secondary: 'text-secondary-foreground group-active:text-secondary-foreground',
-        ghost: 'group-active:text-accent-foreground',
-        link: 'text-primary group-active:underline',
-        small: 'text-brand',
-        kakao: 'text-[#000000]',
+        inline: 'text-brand text-base',
       },
       size: {
         default: '',
-        sm: '',
-        lg: 'native:text-[16px]',
-        base: 'native:text-[16px]', // add
-        icon: '',
-        small: '',
+        inline: 'w-full px-4 ',
       },
     },
     defaultVariants: {
@@ -73,7 +50,7 @@ const Button = React.forwardRef<React.ElementRef<typeof Pressable>, ButtonProps>
   ({ className, variant, size, ...props }, ref) => {
     return (
       <TextClassContext.Provider
-        value={cn(buttonTextVariants({ variant, size }), props.disabled && 'text-[#999]')}>
+        value={cn(buttonTextVariants({ variant, size }), props.disabled && 'text-[#505050]')}>
         <Pressable
           className={cn(
             buttonVariants({ variant, size, className }),

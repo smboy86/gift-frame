@@ -51,8 +51,6 @@ export default function RootLayout() {
     'Pretendard-SemiBold': require('../assets/font/Pretendard-SemiBold.ttf'),
   });
 
-  console.log('ffff  ', loaded, error);
-
   // for splash / font / asset
   React.useEffect(() => {
     (async () => {
