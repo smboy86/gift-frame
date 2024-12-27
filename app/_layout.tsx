@@ -12,6 +12,7 @@ import { PortalHost } from '@rn-primitives/portal';
 import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
 import { AuthProvider } from '~/providers/AuthProvider';
 import QueryProvider from '~/providers/QueryProvider';
+import { useFonts } from 'expo-font';
 
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko'; // TODO - web에서 locale 지정이 풀리는 문제 발견
@@ -44,6 +45,13 @@ export default function RootLayout() {
   // getKeyHashAndroid().then(console.log);
   const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
+  const [loaded, error] = useFonts({
+    'Pretendard-Light': require('../assets/font/Pretendard-Light.ttf'),
+    'Pretendard-Regular': require('../assets/font/Pretendard-Regular.ttf'),
+    'Pretendard-SemiBold': require('../assets/font/Pretendard-SemiBold.ttf'),
+  });
+
+  console.log('ffff  ', loaded, error);
 
   // for splash / font / asset
   React.useEffect(() => {

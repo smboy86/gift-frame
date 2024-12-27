@@ -23,7 +23,6 @@
     "submit:android": "npx eas-cli submit --platform android --profile production"
   },
   "dependencies": {
-    "@expo/metro-runtime": "~4.0.0",
     "@hookform/resolvers": "^3.9.1",
     "@react-native-async-storage/async-storage": "1.23.1",
     "@react-navigation/native": "^6.0.2",
@@ -62,6 +61,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@expo/metro-runtime": "^4.0.0",
     "@types/react": "~18.3.12",
     "compression": "^1.7.5",
     "express": "^4.21.1",

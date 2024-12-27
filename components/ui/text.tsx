@@ -13,6 +13,9 @@ const Text = React.forwardRef<TextRef, SlottableTextProps>(
 
     return (
       <Component
+        style={{
+          fontFamily: 'Pretendard-Regular', // for web trick
+        }}
         className={cn(
           'font-Pretendard-Regular text-base font-normal text-foreground web:select-text',
           props.disabled && 'native:text-[#999999]',

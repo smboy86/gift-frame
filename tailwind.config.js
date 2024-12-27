@@ -11,14 +11,17 @@ module.exports = {
         'Pretendard-Light': platformSelect({
           android: 'Pretendard-Light',
           ios: 'Pretendard-Light',
+          web: 'Pretendard-Light',
         }),
         'Pretendard-Regular': platformSelect({
           android: 'Pretendard-Regular',
           ios: 'Pretendard-Regular',
+          web: 'Pretendard-Regular',
         }),
         'Pretendard-SemiBold': platformSelect({
           android: 'Pretendard-SemiBold',
           ios: 'Pretendard-SemiBold',
+          web: 'Pretendard-SemiBold',
         }),
       },
       fontSize: {
