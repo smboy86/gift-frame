@@ -1,6 +1,4 @@
-import { Link } from 'expo-router';
 import { View } from 'react-native';
-import useTestList from '~/api/useTestList';
 import { Wrap } from '~/components/layout/\bwrap';
 import { Container } from '~/components/layout/container';
 import { Button } from '~/components/ui/button';
@@ -9,9 +7,6 @@ import { Text } from '~/components/ui/text';
 import images from '~/constants/images';
 
 export default function Screen() {
-  const { data, isLoading, refetch } = useTestList({});
-
-  if (isLoading) return null;
   return (
     <Container>
       <Wrap type='default' full className=''>

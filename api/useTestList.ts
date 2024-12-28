@@ -20,7 +20,7 @@ const useTestList = (props: Props) => {
     queryFn: async () => {
       // if (isEmpty(session)) return [];
 
-      const { data, error } = await supabase.from('test_table').select(`*`);
+      const { data, error } = await supabase.from('order').select(`*`);
 
       if (error || !data) {
         throw new Error('An error occurred while fetching data: ' + error?.message);

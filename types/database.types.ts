@@ -9,18 +9,36 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      test_table: {
+      order: {
         Row: {
+          address1: string | null
+          address2: string | null
           created_at: string
+          hp: string | null
           id: number
+          name: string | null
+          qrcode: string
+          zip: string | null
         }
         Insert: {
+          address1?: string | null
+          address2?: string | null
           created_at?: string
+          hp?: string | null
           id?: number
+          name?: string | null
+          qrcode?: string
+          zip?: string | null
         }
         Update: {
+          address1?: string | null
+          address2?: string | null
           created_at?: string
+          hp?: string | null
           id?: number
+          name?: string | null
+          qrcode?: string
+          zip?: string | null
         }
         Relationships: []
       }

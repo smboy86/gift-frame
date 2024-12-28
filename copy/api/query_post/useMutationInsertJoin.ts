@@ -20,7 +20,7 @@ const useMutationInsertJoin = () => {
   return useMutation({
     mutationFn: async ({ id, hp, date_time }: Props) => {
       const { data, error } = await supabase
-        .from('schedule_grab')
+        .from('order')
         .upsert(
           {
             schedule_id: id,

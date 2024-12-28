@@ -1,6 +1,5 @@
 import { useRouter } from 'expo-router';
 import { ScrollView, View } from 'react-native';
-import useTestList from '~/api/useTestList';
 import { Wrap } from '~/components/layout/\bwrap';
 import { Container } from '~/components/layout/container';
 import { Button } from '~/components/ui/button';
@@ -15,6 +14,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
 import DialogAddress from '~/components/screen/dialogAddress';
+import { supabase } from '~/utils/supabase';
+import { decode } from 'base64-arraybuffer';
 
 export const TForm = z.object({
   name: z.string().min(3, {
@@ -28,9 +29,6 @@ export const TForm = z.object({
   address2: z.string().min(3, {
     message: '상세주소를 입력해주세요. 3자 이상',
   }),
-  // member_cnt: z.string().min(1, {
-  //   message: 'err 인원을 선택해주세요',
-  // }),
 });
 
 export default function Screen() {
@@ -38,27 +36,47 @@ export default function Screen() {
     control,
     handleSubmit,
     setValue,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
   } = useForm<z.infer<typeof TForm>>({
     mode: 'onChange',
     resolver: zodResolver(TForm),
   });
 
   const router = useRouter();
-  const { data, isLoading, refetch } = useTestList({});
 
-  // temp var
-  const [valueT, setValueT] = useState('');
+  //todo - refector
   const [image, setImage] = useState<string | null>(null);
+  const [imageResult, setImageResult] = useState<ImagePicker.ImagePickerResult>();
 
   const uploadImage = async () => {
-    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images', 'videos'],
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
+      base64: true,
     });
+
+    setImageResult(result);
+    // console.log('dddd  ', result);
+    /*
+    {
+      "canceled": false,
+      "assets": [
+              {
+              "uri": "data:image/jpeg;base64,/9j/4QAYRXhpZgAASUkqAAgAAAAAAAAAAAAAAP/sABFEdWNreQABAAQAAABkAAD/ ........",
+              "width": 500,
+              "height": 500,
+              "type": "image",
+              "mimeType": "image/jpeg",
+              "fileName": "KakaoTalk_Photo_2024-12-09-17-53-34.jpeg",
+              "fileSize": 15042,
+              "base64": "/9j/4QAYRXhpZgAASUkqAAgAAAAAAAA/Z ........",
+              "file": {}
+            }
+        ]
+    }
+    */
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
@@ -68,9 +86,49 @@ export default function Screen() {
   // 배송 시작
   const onSubmit = async (data: z.infer<typeof TForm>) => {
     console.log('onSubmit :: ', data);
+    //   {
+    //     "name": "31231321",
+    //     "hp": "01071230816",
+    //     "zip": "11821",
+    //     "address1": "경기 의정부시 서광로 101",
+    //     "address2": "333213123"
+    // }
+
+    //1) 데이터 저장
+    const { error } = await supabase.from('order').insert(data);
+
+    if (error) {
+      console.log('fdfdf 에러 발생 ', error);
+      return null;
+    }
+
+    // 2) 이미지 스토리지 업로드
+    const assets = imageResult?.assets;
+    if (assets && assets.length > 0) {
+      const img = imageResult.assets[0];
+      // const base64 = await FileSystem.readAsStringAsync(img.uri, { encoding: 'base64' });
+      // const filePath = `${user!.id}/${new Date().getTime()}.${img.type === 'image' ? 'png' : 'mp4'}`;
+      const filePath = `${new Date().getTime()}`;
+
+      const { data: dataStorage, error } = await supabase.storage
+        .from('image')
+        .upload(`public/${filePath}`, decode(img.base64 || ''), {
+          cacheControl: '3600',
+          upsert: false,
+          contentType: 'image/*',
+        });
+
+      if (error) {
+        console.log('fdfdf 에러 발생 ', error);
+        return null;
+      }
+    } else {
+      alert('이미지를 업로드해주세요');
+    }
+
+    router.replace('/(main)/complete');
   };
 
-  if (isLoading) return null;
   return (
     <Container>
       <Wrap type='default' className=''>
@@ -278,7 +336,10 @@ export default function Screen() {
               </View>
             </View>
             <View className='w-full'>
-              <Button variant={'default'} disabled={!isValid} onPress={handleSubmit(onSubmit)}>
+              <Button
+                variant={'default'}
+                disabled={!isValid || isSubmitting}
+                onPress={handleSubmit(onSubmit)}>
                 <Text>배송 시작하기</Text>
               </Button>
             </View>

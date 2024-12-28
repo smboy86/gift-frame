@@ -1,6 +1,7 @@
 {
   "expo": {
-    "name": "주문형 액자",
+    "name": "기프트 프레임",
+    "description": "액자와 함께 담는 무료 사진 인화 서비스",
     "slug": "gift-frame",
     "scheme": "gift-frame",
     "version": "1.0.0",
