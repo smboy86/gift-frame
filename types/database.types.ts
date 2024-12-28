@@ -42,6 +42,24 @@ export type Database = {
         }
         Relationships: []
       }
+      qrcode: {
+        Row: {
+          created_at: string
+          id: number
+          qrcode: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          qrcode?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          qrcode?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

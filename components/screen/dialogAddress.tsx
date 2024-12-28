@@ -56,3 +56,47 @@ export default function DialogAddress(props: Props) {
     </Dialog>
   );
 }
+
+/*
+  {
+    "postcode": "",
+    "postcode1": "",
+    "postcode2": "",
+    "postcodeSeq": "",
+    "zonecode": "11821",
+    "addresss": "경기 의정부시 서광로 101",
+    "addresssEnglish": "101 Seogwang-ro, Uijeongbu-si, Gyeonggi-do, Republic of Korea",
+    "addresssType": "R",
+    "bcode": "4115011300",
+    "bname": "산곡동",
+    "bnameEnglish": "Sangok-dong",
+    "bname1": "",
+    "bname1English": "",
+    "bname2": "산곡동",
+    "bname2English": "Sangok-dong",
+    "sido": "경기",
+    "sidoEnglish": "Gyeonggi-do",
+    "sigungu": "의정부시",
+    "sigunguEnglish": "Uijeongbu-si",
+    "sigunguCode": "41150",
+    "userLanguageType": "K",
+    "query": "서광로 101",
+    "buildingName": "고산 더 라피니엘",
+    "buildingCode": "4115011200100000000000129",
+    "apartment": "Y",
+    "jibunaddresss": "경기 의정부시 산곡동 710",
+    "jibunaddresssEnglish": "710 Sangok-dong, Uijeongbu-si, Gyeonggi-do, Republic of Korea",
+    "roadaddresss": "경기 의정부시 서광로 101",
+    "roadaddresssEnglish": "101 Seogwang-ro, Uijeongbu-si, Gyeonggi-do, Republic of Korea",
+    "autoRoadaddresss": "",
+    "autoRoadaddresssEnglish": "",
+    "autoJibunaddresss": "",
+    "autoJibunaddresssEnglish": "",
+    "userSelectedType": "R",
+    "noSelected": "N",
+    "hname": "",
+    "roadnameCode": "3352497",
+    "roadname": "서광로",
+    "roadnameEnglish": "Seogwang-ro"
+}
+  */

@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { ScrollView, View } from 'react-native';
 import { Wrap } from '~/components/layout/\bwrap';
 import { Container } from '~/components/layout/container';
@@ -8,7 +8,7 @@ import { Input } from '~/components/ui/input';
 import { Text } from '~/components/ui/text';
 import images from '~/constants/images';
 import * as z from 'zod';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,8 +16,10 @@ import React from 'react';
 import DialogAddress from '~/components/screen/dialogAddress';
 import { supabase } from '~/utils/supabase';
 import { decode } from 'base64-arraybuffer';
+import useCheckQrcode from '~/api/useCheckQrcode';
 
 export const TForm = z.object({
+  qrcode: z.string(),
   name: z.string().min(3, {
     message: '수령인을 입력해주세요. 3자 이상',
   }),
@@ -32,6 +34,10 @@ export const TForm = z.object({
 });
 
 export default function Screen() {
+  const router = useRouter();
+  const { qrcode } = useLocalSearchParams<{ qrcode: string }>();
+  const { data, isLoading } = useCheckQrcode({ qrcode: qrcode });
+
   const {
     control,
     handleSubmit,
@@ -40,9 +46,10 @@ export default function Screen() {
   } = useForm<z.infer<typeof TForm>>({
     mode: 'onChange',
     resolver: zodResolver(TForm),
+    defaultValues: {
+      qrcode: qrcode,
+    },
   });
-
-  const router = useRouter();
 
   //todo - refector
   const [image, setImage] = useState<string | null>(null);
@@ -84,8 +91,8 @@ export default function Screen() {
   };
 
   // 배송 시작
-  const onSubmit = async (data: z.infer<typeof TForm>) => {
-    console.log('onSubmit :: ', data);
+  const onSubmit = async (formData: z.infer<typeof TForm>) => {
+    // console.log('onSubmit :: ', data);
     //   {
     //     "name": "31231321",
     //     "hp": "01071230816",
@@ -95,7 +102,7 @@ export default function Screen() {
     // }
 
     //1) 데이터 저장
-    const { error } = await supabase.from('order').insert(data);
+    const { error } = await supabase.from('order').insert(formData);
 
     if (error) {
       console.log('fdfdf 에러 발생 ', error);
@@ -106,8 +113,6 @@ export default function Screen() {
     const assets = imageResult?.assets;
     if (assets && assets.length > 0) {
       const img = imageResult.assets[0];
-      // const base64 = await FileSystem.readAsStringAsync(img.uri, { encoding: 'base64' });
-      // const filePath = `${user!.id}/${new Date().getTime()}.${img.type === 'image' ? 'png' : 'mp4'}`;
       const filePath = `${new Date().getTime()}`;
 
       const { data: dataStorage, error } = await supabase.storage
@@ -119,7 +124,7 @@ export default function Screen() {
         });
 
       if (error) {
-        console.log('fdfdf 에러 발생 ', error);
+        console.log('image uplaod 에러 발생 ', error);
         return null;
       }
     } else {
@@ -128,6 +133,22 @@ export default function Screen() {
 
     router.replace('/(main)/complete');
   };
+
+  useEffect(() => {
+    if (data === undefined) {
+      alert('QR코드가 잘못되었습니다. 올바른 접근이 아닙니다.');
+      router.replace('/');
+      return;
+    }
+
+    if (data?.length <= 0) {
+      alert('QR코드가 잘못되었습니다.');
+      router.replace('/');
+      return;
+    }
+  }, []);
+
+  if (isLoading) return null;
 
   return (
     <Container>
@@ -245,49 +266,6 @@ export default function Screen() {
                       onSelect={(data) => {
                         setValue('zip', data.zonecode.toString());
                         setValue('address1', data.address.toString());
-                        /*
-                      {
-                        "postcode": "",
-                        "postcode1": "",
-                        "postcode2": "",
-                        "postcodeSeq": "",
-                        "zonecode": "11821",
-                        "addresss": "경기 의정부시 서광로 101",
-                        "addresssEnglish": "101 Seogwang-ro, Uijeongbu-si, Gyeonggi-do, Republic of Korea",
-                        "addresssType": "R",
-                        "bcode": "4115011300",
-                        "bname": "산곡동",
-                        "bnameEnglish": "Sangok-dong",
-                        "bname1": "",
-                        "bname1English": "",
-                        "bname2": "산곡동",
-                        "bname2English": "Sangok-dong",
-                        "sido": "경기",
-                        "sidoEnglish": "Gyeonggi-do",
-                        "sigungu": "의정부시",
-                        "sigunguEnglish": "Uijeongbu-si",
-                        "sigunguCode": "41150",
-                        "userLanguageType": "K",
-                        "query": "서광로 101",
-                        "buildingName": "고산 더 라피니엘",
-                        "buildingCode": "4115011200100000000000129",
-                        "apartment": "Y",
-                        "jibunaddresss": "경기 의정부시 산곡동 710",
-                        "jibunaddresssEnglish": "710 Sangok-dong, Uijeongbu-si, Gyeonggi-do, Republic of Korea",
-                        "roadaddresss": "경기 의정부시 서광로 101",
-                        "roadaddresssEnglish": "101 Seogwang-ro, Uijeongbu-si, Gyeonggi-do, Republic of Korea",
-                        "autoRoadaddresss": "",
-                        "autoRoadaddresssEnglish": "",
-                        "autoJibunaddresss": "",
-                        "autoJibunaddresssEnglish": "",
-                        "userSelectedType": "R",
-                        "noSelected": "N",
-                        "hname": "",
-                        "roadnameCode": "3352497",
-                        "roadname": "서광로",
-                        "roadnameEnglish": "Seogwang-ro"
-                    }
-                      */
                       }}
                     />
                   </View>

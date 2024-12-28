@@ -3,7 +3,7 @@ import { useAuth } from '~/providers/AuthProvider';
 import { supabase } from '~/utils/supabase';
 
 type Props = {
-  // date: string;
+  qrcode: string;
 };
 
 // type Return = Database['public']['Tables']['schedule']['Row'];
@@ -12,15 +12,15 @@ type ReturnValue = {
   id: number;
 };
 
-const useTestList = (props: Props) => {
+const useCheckQrcode = (props: Props) => {
   // const { session } = useAuth(); // 테스트 인 경우 or
 
   return useQuery<Array<ReturnValue>>({
-    queryKey: ['test'],
+    queryKey: ['qr'],
     queryFn: async () => {
       // if (isEmpty(session)) return [];
 
-      const { data, error } = await supabase.from('order').select(`*`);
+      const { data, error } = await supabase.from('qrcode').select(`*`).eq('qrcode', props.qrcode);
 
       if (error || !data) {
         throw new Error('An error occurred while fetching data: ' + error?.message);
@@ -33,7 +33,7 @@ const useTestList = (props: Props) => {
   });
 };
 
-export default useTestList;
+export default useCheckQrcode;
 
 // ### 사용부
 //  const { data, isLoading, refetch } = useTestList({ date: '' });
